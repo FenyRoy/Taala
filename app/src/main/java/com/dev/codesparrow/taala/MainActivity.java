@@ -4,9 +4,12 @@ package com.dev.codesparrow.taala;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +21,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainBtn.findViewById(R.id.MainBtn);
+        mainBtn = findViewById(R.id.MainBtn);
+
+        String timeSettings = android.provider.Settings.System.getString(
+                this.getContentResolver(),
+                android.provider.Settings.System.AUTO_TIME);
+        if (timeSettings.contentEquals("0")) {
+            android.provider.Settings.System.putString(
+                    this.getContentResolver(),
+                    android.provider.Settings.System.AUTO_TIME, "1");
+        }
+        Date now = new Date(System.currentTimeMillis());
+        Toast.makeText(this, "Date "+now.toString(), Toast.LENGTH_LONG).show();
 
         mainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(this,"Test Commit Baby!", Toast.LENGTH_LONG).show();
         
 
     }
