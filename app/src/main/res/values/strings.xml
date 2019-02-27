@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Taala</string>
+    <string name="hyphen">-</string>
 </resources>
