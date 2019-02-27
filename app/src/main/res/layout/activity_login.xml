@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dadada"
+    android:background="@drawable/back_gradient"
     tools:context=".LoginActivity">
 
     <TextView
@@ -25,9 +25,20 @@
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:layout_centerInParent="true"
+        android:hint=""
+        android:gravity="center"
         android:id="@+id/UidText"
-        android:background="@null"
+        android:background="@drawable/gradient_curved"
         android:layout_centerHorizontal="true"
         android:inputType="number"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_below="@id/UidText"
+        android:id="@+id/LgnBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/curved_corners"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>
