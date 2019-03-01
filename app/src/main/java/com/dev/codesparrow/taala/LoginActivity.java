@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,8 +26,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent OtpIntent = new Intent(LoginActivity.this,OtpActivity.class);
-                startActivity(OtpIntent);
+                if(UidText.getText().toString().isEmpty())
+                {
+                    Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Intent OtpIntent = new Intent(LoginActivity.this,OtpActivity.class);
+                    startActivity(OtpIntent);
+                }
+
 
             }
         });
