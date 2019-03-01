@@ -8,13 +8,13 @@
     android:background="#ffffff"
     tools:context=".SplashActivity">
 
-    <TextView
+    <ImageView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="60dp"
+        android:layout_margin="20dp"
         android:fontFamily="cursive"
         android:textStyle="bold"
-        android:layout_centerInParent="true"
-        android:text="Welcome" />
+        android:src="@drawable/logo"
+        android:layout_centerInParent="true" />
 </RelativeLayout>
