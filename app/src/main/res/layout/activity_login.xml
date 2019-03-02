@@ -8,16 +8,7 @@
     android:background="@drawable/back_gradient"
     tools:context=".LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Your Username"
-        android:textSize="30dp"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_above="@id/UidText"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView"
-        android:paddingBottom="30dp"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_marginStart="30dp"
@@ -25,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:layout_centerInParent="true"
-        android:hint=""
+        android:hint="@string/enter_username"
         android:gravity="center"
         android:id="@+id/UidText"
         android:background="@drawable/gradient_curved"
@@ -35,7 +26,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/login"
         android:layout_below="@id/UidText"
         android:id="@+id/LgnBtn"
         android:layout_centerHorizontal="true"

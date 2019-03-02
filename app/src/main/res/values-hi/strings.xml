@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">साइफर</string>
+    <string name="hyphen">-</string>
+
+    <string name="menu_language">भाषा</string>
+    <string name="menu_help">मदद</string>
+
+    <string name="enter_username">उपयोगकर्ता नाम</string>
+    <string name="login">लॉगिन  </string>
+    <string name="otp">औ टी पी </string>
+    <string name="submit">सबमिट</string>
+
+
+</resources>
