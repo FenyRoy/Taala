@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -56,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
-    String encrypted,decrypted,result,ans,filename;
+    String encrypted,decrypted,result,ans,filename,xml;
     TextView AvailaNoti;
 
 
@@ -151,7 +158,45 @@ public class LoginActivity extends AppCompatActivity {
             case 7:
                 if (resultCode == RESULT_OK) {
                     String PathHolder = data.getData().getPath();
-                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
+                    FileInputStream fis1;
+                    try {
+
+
+
+
+
+                        File sdcard = Environment.getExternalStorageDirectory();
+                        File file = new File(sdcard,PathHolder);
+                        StringBuilder text = new StringBuilder();
+                        try {
+                            BufferedReader br = new BufferedReader(new FileReader(file));
+                            String line;
+
+                            while ((line = br.readLine()) != null) {
+                                text.append(line);
+                                text.append('\n');
+                            }
+                            br.close();
+                        }
+                        catch (IOException e) {
+                            Toast.makeText(this, "Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+
+//Here We Stopped
+
+//                        fis1 = openFileInput(PathHolder);
+//                        ObjectInputStream ois = new ObjectInputStream(fis1);
+//                        xml = (String) ois.readObject();
+//                        ois.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+//                    Toast.makeText(this, xml, Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
                 }
                 break;
         }
