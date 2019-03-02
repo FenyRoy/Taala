@@ -80,11 +80,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
-<<<<<<< HEAD
-                    Toast.makeText(LoginActivity.this, publicKey.toString() + " diff " + privateKey.toString(), Toast.LENGTH_SHORT).show();
-=======
-                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
->>>>>>> parent of bac701b... Revert "RSA Encryption"
                 } else {
                     Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
                     startActivity(OtpIntent);
@@ -97,22 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public String ParseJSON(String name, String dob, String address, String father) {
         try {
-<<<<<<< HEAD
-            // get instance of rsa cipher
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(4096);            // initialize key generator
-            keyPair = keyGen.generateKeyPair(); // generate pair of keys
-        } catch (GeneralSecurityException e) {
-            System.out.println(e);
-        }
-        return keyPair;
-
-
-    }
-    public String ParseJSON (String name, String dob, String address, String father){
-        try {
-=======
->>>>>>> parent of bac701b... Revert "RSA Encryption"
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", name);
