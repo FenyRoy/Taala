@@ -71,10 +71,12 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, encoded, Toast.LENGTH_SHORT).show();
             result = RSAEncrypt(encoded);
-            Log.i("Err",result);
+            Log.i("RSA Encrypted: ",result);
             Toast.makeText(getBaseContext(), result,Toast.LENGTH_SHORT).show();
 
             ans= RSADecrypt(result);
+            Log.i("RSA Decrypted: ",result);
+
             System.out.println("Result is"+ans);
             Toast.makeText(getBaseContext(), ans,Toast.LENGTH_LONG).show();
 
@@ -134,15 +136,6 @@ public class LoginActivity extends AppCompatActivity {
 
         keys=kp;
         saveToFile();
-        byte[] publicKeyBytes = publicKey.getEncoded();
-        String publicKeyBytesBase64 = new String(Base64.encode(publicKeyBytes, Base64.DEFAULT));
-
-        PrivateKey privateKey = kp.getPrivate();
-        byte[] privateKeyBytes = privateKey.getEncoded();
-        String privateKeyBytesBase64 = new String(Base64.encode(privateKeyBytes, Base64.DEFAULT));
-
-        Toast.makeText(this, publicKeyBytesBase64, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, privateKeyBytesBase64, Toast.LENGTH_LONG).show();
 
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
