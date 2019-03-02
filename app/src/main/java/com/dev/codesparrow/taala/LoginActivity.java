@@ -43,14 +43,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(UidText.getText().toString().isEmpty())
-                {
+                if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(LoginActivity.this, publicKey.toString()+" diff "+privateKey.toString(), Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Intent OtpIntent = new Intent(LoginActivity.this,OtpActivity.class);
+                    Toast.makeText(LoginActivity.this, publicKey.toString() + " diff " + privateKey.toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
                     startActivity(OtpIntent);
                 }
 
@@ -66,23 +63,25 @@ public class LoginActivity extends AppCompatActivity {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(4096);            // initialize key generator
             keyPair = keyGen.generateKeyPair(); // generate pair of keys
-        } catch(GeneralSecurityException e) {
+        } catch (GeneralSecurityException e) {
             System.out.println(e);
         }
         return keyPair;
 
-    public String ParseJSON(String name,String dob,String address,String father){
-        try{
+
+    }
+    public String ParseJSON (String name, String dob, String address, String father){
+        try {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name",name);
-            jsonObject.put("dob",dob);
-            jsonObject.put("address",address);
-            jsonObject.put("father",father);
+            jsonObject.put("name", name);
+            jsonObject.put("dob", dob);
+            jsonObject.put("address", address);
+            jsonObject.put("father", father);
 
             return jsonObject.toString();
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
