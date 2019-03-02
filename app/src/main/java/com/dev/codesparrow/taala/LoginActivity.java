@@ -72,15 +72,21 @@ public class LoginActivity extends AppCompatActivity {
 
         UidText = findViewById(R.id.UidText);
 
+        LoginButton = findViewById(R.id.LgnBtn);
+
+
+
         UidText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 AvailaNoti.setText("");
+                LoginButton.setBackgroundResource(R.drawable.button_disabled_background);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()>=5){
+                    LoginButton.setBackgroundResource(R.drawable.button_background);
                     AvailaNoti.setText("Username Available");
                 }
             }
@@ -120,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        LoginButton = findViewById(R.id.LgnBtn);
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

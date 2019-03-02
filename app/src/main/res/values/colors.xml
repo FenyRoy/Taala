@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#364eb0</color>
     <color name="colorAccent">#D81B60</color>
     <color name="top_bar">#364eb0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="myblue1">#3F51B5</color>
+
+
 </resources>

@@ -1,32 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFFF"
+    android:background="@color/white"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
     tools:context=".LoginActivity">
 
-
     <TextView
+        android:id="@+id/mytext1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=" "
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Make Your Device\nYour Data Provider"
+        android:textColor="@color/myblue1"
+        android:layout_marginBottom="10dp"
+        android:textSize="30dp"
+        android:layout_above="@id/mytext2"
+        />
+    <TextView
+        android:id="@+id/mytext2"
+        android:layout_above="@id/avaiNoti"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Enter a unique username to identify your data!"
+        android:textColor="@color/black"
+        android:textSize="14dp" />
+
+    <TextView
         android:id="@+id/avaiNoti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/UidText"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:layout_marginBottom="10sp"
-        android:textColor="#1E9723"/>
+        android:gravity="center"
+        android:text=" "
+        android:textColor="#1E9723" />
 
     <EditText
         android:id="@+id/UidText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:background="@drawable/input_background"
         android:hint="@string/enter_username"
         android:inputType="text"
@@ -34,17 +56,17 @@
         android:paddingTop="12dp"
         android:paddingRight="18dp"
         android:paddingBottom="12dp"
-        android:textColor="#0000000"
-        android:textSize="18dp" />
+        android:textColor="@color/black"
+        android:textSize="16dp" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Continue"
-        android:layout_below="@id/UidText"
         android:id="@+id/LgnBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/UidText"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_background"
-        android:layout_marginTop="10dp"/>
+        android:background="@drawable/button_disabled_background"
+        android:text="Continue"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
