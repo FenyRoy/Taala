@@ -74,11 +74,11 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("RSA Encrypted: ",result);
             Toast.makeText(getBaseContext(), result,Toast.LENGTH_SHORT).show();
 
-            ans= RSADecrypt(result);
+            /*ans= RSADecrypt(result);
             Log.i("RSA Decrypted: ",result);
 
             System.out.println("Result is"+ans);
-            Toast.makeText(getBaseContext(), ans,Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), ans,Toast.LENGTH_LONG).show()*/;
 
         } catch (Exception e) {
 

@@ -32,15 +32,15 @@ public class SplashActivity extends AppCompatActivity {
             public void run(){
                 try {
                     sleep(3000);
-                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent mainIntent = new Intent(SplashActivity.this, IntroActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     Intent loginIntent = new Intent(SplashActivity.this,LoginActivity.class);
-                    if(isLoggedIn){
+                    /*if(isLoggedIn){*/
                         startActivity(mainIntent);
-                    }
+                    /*}
                     else if(!isLoggedIn) {
                         startActivity(loginIntent);
-                    }
+                    }*/
                     finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
