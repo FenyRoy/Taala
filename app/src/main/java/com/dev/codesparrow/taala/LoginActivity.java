@@ -1,5 +1,6 @@
 package com.dev.codesparrow.taala;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -21,6 +24,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
-    String encrypted,decrypted,result,ans;
+    String encrypted,decrypted,result,ans,filename;
+    private List<String> keys;
 
 
     @Override
@@ -49,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        filename ="Key_Values";
+
+        keys = new ArrayList<String>();
 
 
         try {
@@ -123,6 +132,11 @@ public class LoginActivity extends AppCompatActivity {
         publicKey = kp.getPublic();
         privateKey = kp.getPrivate();
 
+        keys.clear();
+        keys.add(publicKey.toString());
+        keys.add(privateKey.toString());
+        saveToFile();
+
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         encryptedBytes = cipher.doFinal(plain.getBytes());
@@ -176,4 +190,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void saveToFile() {
+        FileOutputStream fos1;
+        try {
+            fos1 = getApplicationContext().openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos1);
+            oos.writeObject(keys);
+            oos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

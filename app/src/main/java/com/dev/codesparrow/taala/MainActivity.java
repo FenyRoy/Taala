@@ -15,7 +15,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Locale locale;
 
     Button mainBtn;
+    String filename,publickKey,privateKey;
+    private List<String> keys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mainBtn = findViewById(R.id.MainBtn);
+
+        filename ="Key_Values";
+
+        keys = new ArrayList<String>();
+        keys.clear();
+        load_file();
+
+        publickKey=keys.get(0);
+        privateKey=keys.get(1);
+
+        Toast.makeText(this, publickKey, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, privateKey, Toast.LENGTH_SHORT).show();
 
         String timeSettings = android.provider.Settings.System.getString(
                 this.getContentResolver(),
@@ -99,4 +117,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void load_file() {
+        FileInputStream fis1;
+        try {
+            fis1 = openFileInput(filename);
+            ObjectInputStream ois = new ObjectInputStream(fis1);
+            keys = (ArrayList<String>) ois.readObject();
+            ois.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
