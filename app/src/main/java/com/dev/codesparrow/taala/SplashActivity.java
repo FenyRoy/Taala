@@ -8,10 +8,15 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.security.KeyPair;
+
 public class SplashActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     boolean isLoggedIn;
+    String pass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +37,16 @@ public class SplashActivity extends AppCompatActivity {
             public void run(){
                 try {
                     sleep(3000);
-                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent passIntent = new Intent(SplashActivity.this, PassActivity.class);
+                    passIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     Intent loginIntent = new Intent(SplashActivity.this,LoginActivity.class);
                     if(isLoggedIn){
-                        startActivity(mainIntent);
+                        startActivity(passIntent);
+                        finish();
                     }
                     else if(!isLoggedIn) {
                         startActivity(loginIntent);
+                        finish();
                     }
                     finish();
                 } catch (InterruptedException e) {

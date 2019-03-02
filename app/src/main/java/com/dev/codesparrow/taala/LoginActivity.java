@@ -3,14 +3,20 @@ package com.dev.codesparrow.taala;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -31,6 +37,7 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.web3j.abi.datatypes.Int;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -40,6 +47,7 @@ import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Integer x;
     Button LoginButton;
     EditText UidText;
     KeyPairGenerator kpg;
@@ -49,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename;
+    TextView AvailaNoti;
 
-    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -58,8 +66,30 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        x=0;
         filename ="Key_Values";
+        AvailaNoti=findViewById(R.id.avaiNoti);
 
+        UidText = findViewById(R.id.UidText);
+
+        UidText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                AvailaNoti.setText("");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>=5){
+                    AvailaNoti.setText("Username Available");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         try {
 
@@ -89,8 +119,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-        UidText = findViewById(R.id.UidText);
-
 
         LoginButton = findViewById(R.id.LgnBtn);
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +128,32 @@ public class LoginActivity extends AppCompatActivity {
                 if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
-                    startActivity(OtpIntent);
-                }
 
+                    if(x==0)
+                    {
+                        webview();
+                        x=1;
+                    }else
+                      loadpassintent();
+                }
             }
         });
+    }
+
+    private void loadpassintent() {
+
+        Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
+        startActivity(OtpIntent);
+
+    }
+
+    private void webview() {
+
+
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse("https://resident.uidai.gov.in/offlineaadhaar"));
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
     }
 
     public String ParseJSON(String name, String dob, String address, String father) {
@@ -134,11 +182,15 @@ public class LoginActivity extends AppCompatActivity {
         publicKey = kp.getPublic();
         privateKey = kp.getPrivate();
 
+        String pubText = Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT);
+        String priText = Base64.encodeToString(privateKey.getEncoded(), Base64.DEFAULT);
+
         keys=kp;
         saveToFile();
 
-        Log.i("Public Key",publicKey.getEncoded().toString());
-        Log.i("Private Key",privateKey.getEncoded().toString());
+        Log.i("Public Key", pubText);
+        Log.i("Private Key",priText);
+
 
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
