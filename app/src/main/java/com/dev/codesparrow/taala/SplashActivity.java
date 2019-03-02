@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity {
         isLoggedIn = getSharedPreferences("PREFERENCE",MODE_PRIVATE)
                 .getBoolean("isLoggedIn",false);
 
-        Toast.makeText(this, String.valueOf(isLoggedIn), Toast.LENGTH_SHORT).show();
 
         Window window = this.getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.top_bar));
