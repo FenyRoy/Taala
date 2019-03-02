@@ -19,6 +19,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -42,13 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     Button LoginButton;
     EditText UidText;
     KeyPairGenerator kpg;
-    KeyPair kp;
+    KeyPair kp,keys;
     static PublicKey publicKey;
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename;
-    private List<String> keys;
 
     SharedPreferences sharedPreferences;
 
@@ -59,8 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         filename ="Key_Values";
-
-        keys = new ArrayList<String>();
 
 
         try {
@@ -134,10 +132,17 @@ public class LoginActivity extends AppCompatActivity {
         publicKey = kp.getPublic();
         privateKey = kp.getPrivate();
 
-        keys.clear();
-        keys.add(publicKey.toString());
-        keys.add(privateKey.toString());
+        keys=kp;
         saveToFile();
+        byte[] publicKeyBytes = publicKey.getEncoded();
+        String publicKeyBytesBase64 = new String(Base64.encode(publicKeyBytes, Base64.DEFAULT));
+
+        PrivateKey privateKey = kp.getPrivate();
+        byte[] privateKeyBytes = privateKey.getEncoded();
+        String privateKeyBytesBase64 = new String(Base64.encode(privateKeyBytes, Base64.DEFAULT));
+
+        Toast.makeText(this, publicKeyBytesBase64, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, privateKeyBytesBase64, Toast.LENGTH_LONG).show();
 
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -157,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
         decrypted = new String(decryptedBytes);
         System.out.println("DDecrypted?????"+decrypted);
         return decrypted;
-
     }
 
     public static String encryptThisString(String input)

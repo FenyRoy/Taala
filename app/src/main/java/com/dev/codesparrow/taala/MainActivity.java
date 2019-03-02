@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private Locale locale;
 
     Button mainBtn;
-    String filename,publickKey,privateKey;
-    private List<String> keys;
+    String filename;
+    static PublicKey publicKey;
+    static PrivateKey privateKey;
+    KeyPair keys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         filename ="Key_Values";
 
-        keys = new ArrayList<String>();
-        keys.clear();
         load_file();
+        publicKey=keys.getPublic();
+        privateKey=keys.getPrivate();
 
-        publickKey=keys.get(0);
-        privateKey=keys.get(1);
 
-        Toast.makeText(this, publickKey, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, privateKey, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, publicKey.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, privateKey.toString(), Toast.LENGTH_SHORT).show();
 
         String timeSettings = android.provider.Settings.System.getString(
                 this.getContentResolver(),
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             fis1 = openFileInput(filename);
             ObjectInputStream ois = new ObjectInputStream(fis1);
-            keys = (ArrayList<String>) ois.readObject();
+            keys = (KeyPair) ois.readObject();
             ois.close();
         } catch (Exception e) {
             e.printStackTrace();
