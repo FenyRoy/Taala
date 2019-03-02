@@ -3,6 +3,7 @@ package com.dev.codesparrow.taala;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -96,7 +97,10 @@ public class OtpActivity extends AppCompatActivity {
                 s3=OtpText3.getText().toString();
                 s4=OtpText4.getText().toString();
 
-
+                SharedPreferences sharedPreferences = OtpActivity.this.getBaseContext().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = OtpActivity.this.getBaseContext().getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("isLoggedIn", true);
+                editor.apply();
 
 
                 if(s1.isEmpty()||s2.isEmpty()||s3.isEmpty()||s4.isEmpty())
