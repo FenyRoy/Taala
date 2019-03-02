@@ -134,6 +134,7 @@ public class PassActivity extends AppCompatActivity {
                         OtpText2.setText("");
                         OtpText3.setText("");
                         OtpText4.setText("");
+                        OtpText1.setFocusable(true);
 
                     }
 
