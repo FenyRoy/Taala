@@ -133,11 +133,28 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         webview();
                         x=1;
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("text/xml");
+                        startActivityForResult(intent, 7);
                     }else
                       loadpassintent();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+
+        switch (requestCode) {
+            case 7:
+                if (resultCode == RESULT_OK) {
+                    String PathHolder = data.getData().getPath();
+                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
     }
 
     private void loadpassintent() {
