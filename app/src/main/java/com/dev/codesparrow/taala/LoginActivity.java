@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button LoginButton;
@@ -20,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         UidText = findViewById(R.id.UidText);
+
 
         LoginButton = findViewById(R.id.LgnBtn);
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -39,5 +43,22 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public String ParseJSON(String name,String dob,String address,String father){
+        try{
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name",name);
+            jsonObject.put("dob",dob);
+            jsonObject.put("address",address);
+            jsonObject.put("father",father);
+
+            return jsonObject.toString();
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
