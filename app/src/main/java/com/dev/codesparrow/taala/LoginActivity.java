@@ -137,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         keys=kp;
         saveToFile();
 
+        Log.i("Public Key",publicKey.getEncoded().toString());
+        Log.i("Private Key",privateKey.getEncoded().toString());
+
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         encryptedBytes = cipher.doFinal(plain.getBytes());
