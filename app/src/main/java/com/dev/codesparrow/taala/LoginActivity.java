@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -33,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText UidText;
     KeyPairGenerator kpg;
     KeyPair kp;
-    PublicKey publicKey;
-    PrivateKey privateKey;
+    static PublicKey publicKey;
+    static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans;
@@ -51,11 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
             String input;
             input= ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
+            
+            String encoded=encryptThisString(input);
 
-            result = RSAEncrypt(input);
+
+            Toast.makeText(this, encoded, Toast.LENGTH_SHORT).show();
+            result = RSAEncrypt(encoded);
+            Log.i("Err",result);
             Toast.makeText(getBaseContext(), result,Toast.LENGTH_SHORT).show();
-
-
 
             ans= RSADecrypt(result);
             System.out.println("Result is"+ans);
@@ -111,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     public String RSAEncrypt(final String plain) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
     {
         kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(4096);
+        kpg.initialize(2048);
         kp = kpg.genKeyPair();
         publicKey = kp.getPublic();
         privateKey = kp.getPrivate();
@@ -135,6 +142,38 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("DDecrypted?????"+decrypted);
         return decrypted;
 
+    }
+
+    public static String encryptThisString(String input)
+    {
+        try {
+            // getInstance() method is called with algorithm SHA-1
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+
+            // digest() method is called
+            // to calculate message digest of the input string
+            // returned as array of byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+
+            // Add preceding 0s to make it 32 bit
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+
+            // return the HashText
+            return hashtext;
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
