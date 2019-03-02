@@ -10,11 +10,22 @@
 
     <ImageView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
         android:layout_margin="20dp"
-        android:fontFamily="cursive"
         android:textStyle="bold"
         android:src="@drawable/logo"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+
 </RelativeLayout>
