@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainBtn = findViewById(R.id.MainBtn);
 
         filename ="Key_Values";
 
@@ -65,17 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Date now = new Date(System.currentTimeMillis());
         Toast.makeText(this, "Date "+now.toString(), Toast.LENGTH_LONG).show();
 
-        mainBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(loginIntent);
-                finish();
-
-            }
-        });
 
         SharedPreferences sp = getSharedPreferences(LOCALE_PREF_KEY, MODE_PRIVATE);
         String localeString = sp.getString(LOCALE_KEY, ENGLISH_LOCALE);

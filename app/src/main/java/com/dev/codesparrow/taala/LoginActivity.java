@@ -2,6 +2,7 @@ package com.dev.codesparrow.taala;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -48,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename;
     private List<String> keys;
+
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -100,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                     Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
                     startActivity(OtpIntent);
                 }
-
 
             }
         });

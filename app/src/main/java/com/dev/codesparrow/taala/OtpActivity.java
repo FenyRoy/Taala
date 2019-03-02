@@ -1,6 +1,8 @@
 package com.dev.codesparrow.taala;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +23,7 @@ public class OtpActivity extends AppCompatActivity {
     String s1,s2,s3,s4;
 
     Button OtpCnfrmBtn;
+
 
     public class GenericTextWatcher implements TextWatcher
     {
@@ -70,6 +73,8 @@ public class OtpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
+
+
         OtpText1 = findViewById(R.id.OTP1);
         OtpText2 = findViewById(R.id.OTP2);
         OtpText3 = findViewById(R.id.OTP3);
@@ -91,6 +96,9 @@ public class OtpActivity extends AppCompatActivity {
                 s3=OtpText3.getText().toString();
                 s4=OtpText4.getText().toString();
 
+
+
+
                 if(s1.isEmpty()||s2.isEmpty()||s3.isEmpty()||s4.isEmpty())
                 {
 
@@ -108,6 +116,9 @@ public class OtpActivity extends AppCompatActivity {
                     startActivity(mainIntent);
 
                 }
+
+
+
 
             }
         });

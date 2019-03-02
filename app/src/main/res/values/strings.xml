@@ -7,6 +7,8 @@
 
     <string name="enter_username">Enter Your Username</string>
     <string name="login">Login</string>
-    <string name="pass">Set Application Password</string>
+
+    <string name="otp">Password</string>
+
     <string name="submit">Submit</string>
 </resources>
