@@ -80,9 +80,59 @@ public class DownloadActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(x>=2) {
-                    loadpassintent();
-                }
+                // Access a Cloud Firestore instance from your Activity
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference users = db.collection("users");
+                DocumentReference docRef = users.document("username");
+                Task<DocumentSnapshot> ref = docRef.get();
+                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Map<String, String> data1 = new HashMap<>();
+                                data1.put("name", "feny");
+                                data1.put("dob", "10-09-19");
+                                data1.put("address", "Pukkunnel House");
+                                data1.put("father", "Roy Paul");
+                                data1.put("signature", "gjdhghughrduo");
+                                data1.put("hash", "grfgjirjg");
+                                Task<Void> reff = users.document("username").set(data1);
+                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        loadpassintent();
+                                    }
+                                });
+                                reff.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d("Firestore", "get failed with ", task.getException());
+                            Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                ref.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
         });
 
@@ -110,53 +160,7 @@ public class DownloadActivity extends AppCompatActivity {
             inputObject= JSONify("feny","10-09-19","Pukkunnel House","Roy Paul");
             String input;
             input = ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
-            // Access a Cloud Firestore instance from your Activity
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            CollectionReference users = db.collection("users");
-            DocumentReference docRef = users.document("username");
-            Task<DocumentSnapshot> ref = docRef.get();
-            ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
-                        } else {
-                            Map<String, String> data1 = new HashMap<>();
-                            data1.put("name", "feny");
-                            data1.put("dob", "10-09-19");
-                            data1.put("address", "Pukkunnel House");
-                            data1.put("father", "Roy Paul");
-                            data1.put("signature", "gjdhghughrduo");
-                            data1.put("hash", "grfgjirjg");
-                            Task<Void> reff = users.document("username").set(data1);
-                            reff.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
 
-                                }
-                            });
-                            reff.addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-
-                                }
-                            });
-                            Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Log.d("Firestore", "get failed with ", task.getException());
-                        Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            ref.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
             String encoded=encryptThisString(input);
 
 
