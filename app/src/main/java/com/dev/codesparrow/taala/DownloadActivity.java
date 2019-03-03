@@ -270,6 +270,8 @@ public class DownloadActivity extends AppCompatActivity {
             String jsonPrettyPrintString = xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR);
             Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
 
+            Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
