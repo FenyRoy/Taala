@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        String name = listItems.get(0);
+        String DOB = listItems.get(1);
+        String address = listItems.get(2);
+        String father = listItems.get(3);
         filename ="Key_Values";
 
         load_file();
