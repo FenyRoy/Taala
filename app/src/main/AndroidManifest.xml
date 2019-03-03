@@ -13,7 +13,6 @@
         android:roundIcon="@drawable/wbg"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AnimActivity"></activity>
         <activity android:name=".DownloadActivity" />
         <activity android:name=".CheckActivity" />
         <activity android:name=".PassActivity" />
