@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Screen Password will protect your account from threats"
+        android:text="Enter the screen password you entered"
         android:textSize="16dp"
         android:fontFamily="sans-serif-condensed"
         android:layout_above="@id/OTP"

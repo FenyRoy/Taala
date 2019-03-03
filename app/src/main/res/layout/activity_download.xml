@@ -1,72 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:gravity="center"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    >
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/mytext_subtitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Screen Password will protect your account from threats"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="STEP 2"
+        android:textColor="#999999"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:id="@+id/mytext1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Fetch Your Data"
+        android:textColor="@color/myblue1"
+        android:layout_marginBottom="10dp"
+        android:textSize="30dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You have to download Your E-KYC from UAIDI web portal. Click the button below to open UAIDI Portal"
         android:textSize="16dp"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30px"
         android:fontFamily="sans-serif-condensed"
         android:layout_centerHorizontal="true"
         android:id="@+id/mytext4"
         android:textColor="@color/black"
-        android:paddingBottom="30dp"/>
+
+        />
 
     <Button
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mytext4"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="25dp"
         android:background="@drawable/normal_button_background"
-        android:text="Download Your File"
-        android:textColor="#FFFFFF" />
+        android:text="Download E-KYC File"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="40dp"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/mytextA"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Screen Password will protect your account from threats"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="STEP 3"
+        android:textColor="#999999"
+        android:textSize="20dp"
+        android:visibility="invisible"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open the downloaded E-KYC file "
         android:textSize="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="sans-serif-condensed"
-        android:layout_below="@id/webview"
         android:layout_centerHorizontal="true"
         android:id="@+id/mytext5"
         android:textColor="@color/black"
-        android:paddingBottom="30dp"/>
+        android:visibility="invisible"
+        />
 
     <Button
         android:id="@+id/uploadFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mytext5"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="25dp"
         android:background="@drawable/normal_button_background"
         android:text="Upload File"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+
+        />
 
     <Button
         android:id="@+id/Continue"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/uploadFile"
+        android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="25dp"
         android:background="@drawable/normal_button_background"
         android:text="Continue"
         android:textColor="#FFFFFF" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,6 +56,8 @@ import javax.crypto.NoSuchPaddingException;
 public class DownloadActivity extends AppCompatActivity {
 
     Button webBtn,fileBtn,continueBtn;
+    TextView mytextA,mytext5;
+
     KeyPairGenerator kpg;
     KeyPair kp,keys;
     static PublicKey publicKey;
@@ -75,6 +78,10 @@ public class DownloadActivity extends AppCompatActivity {
         webBtn=findViewById(R.id.webview);
         fileBtn=findViewById(R.id.uploadFile);
         continueBtn=findViewById(R.id.Continue);
+
+        mytextA=findViewById(R.id.mytextA);
+        mytext5=findViewById(R.id.mytext5);
+
         filename ="Key_Values";
 
         continueBtn.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +148,11 @@ public class DownloadActivity extends AppCompatActivity {
             public void onClick(View view) {
                 webview();
                 x++;
+                mytextA.setVisibility(View.VISIBLE);
+                mytext5.setVisibility(View.VISIBLE);
+                fileBtn.setVisibility(View.VISIBLE);
+
+
             }
         });
 
@@ -151,6 +163,7 @@ public class DownloadActivity extends AppCompatActivity {
                 intent.setType("text/xml");
                 startActivityForResult(intent, 7);
                 x++;
+                continueBtn.setVisibility(View.VISIBLE);
             }
         });
 
