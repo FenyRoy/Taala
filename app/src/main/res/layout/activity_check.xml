@@ -103,6 +103,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/nameChkBox"
+                android:checked="false"
                 android:layout_gravity="end"
                 />
 
@@ -126,7 +128,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/addressChkBox"
                 android:layout_gravity="end"
+                android:checked="false"
                 android:textColor="@color/black"
                 />
 
@@ -150,6 +154,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/dobChkBox"
+                android:checked="false"
                 />
 
         </LinearLayout>
@@ -165,13 +171,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/text4"
                 android:textColor="@color/black"
-                android:text="Phone NO"
+                android:text="Gender"
                 android:textSize="20dp"
                 android:layout_weight="9"/>
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/genderChkBox"
+                android:checked="false"
                 />
 
         </LinearLayout>

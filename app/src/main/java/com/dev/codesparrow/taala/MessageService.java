@@ -24,6 +24,7 @@ public class MessageService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d("FCM", "Message data payload: " + remoteMessage.getData());
+            startActivity(loginIntent);
 
 //            if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
@@ -38,6 +39,8 @@ public class MessageService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d("FCM", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            startActivity(loginIntent);
+
         }
     }
 
