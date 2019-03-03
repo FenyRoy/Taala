@@ -8,12 +8,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/wbg"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/wbg"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterSuccessActivity"></activity>
         <activity android:name=".DownloadActivity" />
         <activity android:name=".CheckActivity" />
         <activity android:name=".PassActivity" />
@@ -31,5 +30,7 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".OtpActivity" />
     </application>
+
+
 
 </manifest>

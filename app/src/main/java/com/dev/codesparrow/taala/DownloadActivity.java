@@ -13,6 +13,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,8 +48,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -53,11 +59,15 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import fr.arnaudguyon.xmltojsonlib.XmlToJson;
+
+import static java.lang.Thread.sleep;
+
 public class DownloadActivity extends AppCompatActivity {
 
     Button webBtn,fileBtn,continueBtn;
     TextView mytextA,mytext5;
-
+    public static int PRETTY_PRINT_INDENT_FACTOR = 4;
     KeyPairGenerator kpg;
     KeyPair kp,keys;
     static PublicKey publicKey;
@@ -66,6 +76,47 @@ public class DownloadActivity extends AppCompatActivity {
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename,xml,Username;
     Integer x=0;
+    ProgressBar prgrsbr;
+    private List<String> listItems;
+    static String myData ="";
+    TextView verifyTxt;
+    public JSONObject jsonObject;
+
+
+    public static String getSHA(String input)
+    {
+
+        try {
+
+            // Static getInstance method is called with hashing SHA
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            // digest() method called
+            // to calculate message digest of an input
+            // and return array of byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+
+            return hashtext;
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            System.out.println("Exception thrown"
+                    + " for incorrect algorithm: " + e);
+
+            return null;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +125,10 @@ public class DownloadActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Username = intent.getExtras().getString("user");
+        prgrsbr=findViewById(R.id.progressBarDwn);
+        verifyTxt=findViewById(R.id.Verifying);
 
+        listItems = new ArrayList<>();
         webBtn=findViewById(R.id.webview);
         fileBtn=findViewById(R.id.uploadFile);
         continueBtn=findViewById(R.id.Continue);
@@ -87,58 +141,110 @@ public class DownloadActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listItems.clear();
                 // Access a Cloud Firestore instance from your Activity
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference users = db.collection("users");
-                DocumentReference docRef = users.document("username");
-                Task<DocumentSnapshot> ref = docRef.get();
-                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Map<String, String> data1 = new HashMap<>();
-                                data1.put("name", "feny");
-                                data1.put("dob", "10-09-19");
-                                data1.put("address", "Pukkunnel House");
-                                data1.put("father", "Roy Paul");
-                                data1.put("signature", "gjdhghughrduo");
-                                data1.put("hash", "grfgjirjg");
-                                Task<Void> reff = users.document(Username).set(data1);
-                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
+                prgrsbr.setVisibility(View.VISIBLE);
+                verifyTxt.setVisibility(View.VISIBLE);
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w("FCMToken", "getInstanceId failed", task.getException());
+                                    return;
+                                }
 
-                                        loadpassintent();
+                                // Get new Instance ID token
+                                String token = task.getResult().getToken();
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                CollectionReference users = db.collection("users");
+                                DocumentReference docRef = users.document(Username);
+                                Task<DocumentSnapshot> ref = docRef.get();
+                                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Toast.makeText(getBaseContext(), "Sorry you already have another account", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Map<String, String> data1 = new HashMap<>();
+                                                try{
+                                                    JSONObject offline = jsonObject.getJSONObject("OfflinePaperlessKyc");
+                                                    JSONObject signatureContent = offline.getJSONObject("Signature");
+                                                    JSONObject UIDdata = offline.getJSONObject("UidData");
+                                                    JSONObject poa = UIDdata.getJSONObject("Poa");
+                                                    JSONObject poi = UIDdata.getJSONObject("Poi");
+                                                    data1.put("name", poi.getString("name"));
+                                                    listItems.add(poi.getString("name"));
+                                                    data1.put("dob", poi.getString("dob"));
+                                                    listItems.add(poi.getString("dob"));
+                                                    data1.put("address", poa.getString("street"));
+                                                    listItems.add(poa.getString("street"));
+                                                    data1.put("gender", poi.getString("gender"));
+                                                    listItems.add(poi.getString("gender"));
+                                                    data1.put("signature", signatureContent.getString("SignatureValue"));
+                                                    data1.put("hash", "grfgjirjg");
+                                                    data1.put("fcm", token);
+                                                }catch(Exception e){
+
+                                                }
+
+                                                FileOutputStream fos1;
+                                                try {
+                                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
+                                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
+                                                    oos.writeObject(listItems);
+                                                    oos.close();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Task<Void> reff = users.document(Username).set(data1);
+
+                                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                        try {
+                                                            sleep(10000);
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        loadpassintent();
+                                                    }
+                                                });
+                                                reff.addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                                Toast.makeText(DownloadActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            task.getException().printStackTrace();
+                                            Log.d("Firestore", "get failed with", task.getException());
+                                            Toast.makeText(DownloadActivity.this, "Firestore Failed", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                });
-                                reff.addOnFailureListener(new OnFailureListener() {
+                                    });
+                                ref.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
 
+
                                     }
                                 });
-                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                                // Log and toast
+                                String msg = token;
+                                Log.d("FCMToken", msg);
+                                Toast.makeText(DownloadActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            task.getException().printStackTrace();
-                            Log.d("Firestore", "get failed with ", task.getException());
-                            Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                ref.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        });
 
 
             }
@@ -171,7 +277,7 @@ public class DownloadActivity extends AppCompatActivity {
         try {
 
             JSONObject inputObject;
-            inputObject= JSONify("feny","10-09-19","Pukkunnel House","Roy Paul");
+            inputObject= JSONify("Feny Roy","10-09-19","Pukkunnel House","Roy Paul");
             String input;
             input = ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
 
@@ -225,13 +331,28 @@ public class DownloadActivity extends AppCompatActivity {
             br = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
             //WHAT TODO ? Is this creates new file with
             //the name NewFileName on internal app storage?
-            String myData ="";
+
             String line = null;
             while ((line = br.readLine()) != null) {
-                myData=myData+line;
+                myData = myData+line;
             }
             lastFunction("newFileName");
+
+
             Toast.makeText(this, myData, Toast.LENGTH_SHORT).show();
+
+
+            XmlToJson xmlToJson = new XmlToJson.Builder(myData).build();
+
+            jsonObject = xmlToJson.toJson();
+
+            // convert to a Json String
+            String jsonString = xmlToJson.toString();
+
+            Toast.makeText(this, jsonString, Toast.LENGTH_SHORT).show();
+
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -329,11 +450,11 @@ public class DownloadActivity extends AppCompatActivity {
         cipher1.init(Cipher.DECRYPT_MODE, privateKey);
         decryptedBytes = cipher1.doFinal(result.getBytes());
         decrypted = new String(decryptedBytes);
-        System.out.println("DDecrypted?????"+decrypted);
+        System.out.println("Decrypted?????"+decrypted);
         return decrypted;
     }
 
-    public static String encryptThisString(String input)
+    public String encryptThisString(String input)
     {
         try {
             // getInstance() method is called with algorithm SHA-1
