@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,15 +16,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -33,6 +44,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -50,13 +64,16 @@ public class DownloadActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
-    String encrypted,decrypted,result,ans,filename,xml;
+    String encrypted,decrypted,result,ans,filename,xml,Username;
     Integer x=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
+        Intent intent = getIntent();
+        Username = intent.getExtras().getString("user");
 
         webBtn=findViewById(R.id.webview);
         fileBtn=findViewById(R.id.uploadFile);
@@ -102,9 +119,57 @@ public class DownloadActivity extends AppCompatActivity {
 
         try {
 
+            JSONObject inputObject;
+            inputObject= JSONify("feny","10-09-19","Pukkunnel House","Roy Paul");
             String input;
-            input= ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
+            input = ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
+            // Access a Cloud Firestore instance from your Activity
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference users = db.collection("users");
+            DocumentReference docRef = users.document("username");
+            Task<DocumentSnapshot> ref = docRef.get();
+            ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Map<String, String> data1 = new HashMap<>();
+                            data1.put("name", "feny");
+                            data1.put("dob", "10-09-19");
+                            data1.put("address", "Pukkunnel House");
+                            data1.put("father", "Roy Paul");
+                            data1.put("signature", "gjdhghughrduo");
+                            data1.put("hash", "grfgjirjg");
+                            Task<Void> reff = users.document("username").set(data1);
+                            reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
+                                }
+                            });
+                            reff.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                            Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d("Firestore", "get failed with ", task.getException());
+                        Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            ref.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
             String encoded=encryptThisString(input);
 
 
@@ -140,49 +205,38 @@ public class DownloadActivity extends AppCompatActivity {
         switch (requestCode) {
             case 7:
                 if (resultCode == RESULT_OK) {
-                    String PathHolder = data.getData().getPath();
-                    FileInputStream fis1;
-                    try {
+                    Uri uri=data.getData();
+                    LaterFunction(uri);
 
-
-
-
-
-                        File sdcard = Environment.getExternalStorageDirectory();
-                        File file = new File(sdcard,PathHolder);
-                        StringBuilder text = new StringBuilder();
-                        try {
-                            BufferedReader br = new BufferedReader(new FileReader(file));
-                            String line;
-
-                            while ((line = br.readLine()) != null) {
-                                text.append(line);
-                                text.append('\n');
-                            }
-                            br.close();
-                        }
-                        catch (IOException e) {
-                            Toast.makeText(this, "Error : " + e.toString(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-
-//Here We Stopped
-
-//                        fis1 = openFileInput(PathHolder);
-//                        ObjectInputStream ois = new ObjectInputStream(fis1);
-//                        xml = (String) ois.readObject();
-//                        ois.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-//                    Toast.makeText(this, xml, Toast.LENGTH_SHORT).show();
-
-//                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
                 }
-                break;
         }
+
+    }
+
+    public void LaterFunction(Uri uri) {
+        BufferedReader br;
+        FileOutputStream os;
+        try {
+            br = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
+            //WHAT TODO ? Is this creates new file with
+            //the name NewFileName on internal app storage?
+            String myData ="";
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                myData=myData+line;
+            }
+            lastFunction("newFileName");
+            Toast.makeText(this, myData, Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void lastFunction(String newFileName) {
+        //WHAT TODO? How to read line line the file
+        //now from internal app storage?
     }
 
     private void loadpassintent() {
@@ -210,6 +264,24 @@ public class DownloadActivity extends AppCompatActivity {
             jsonObject.put("father", father);
 
             return jsonObject.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public JSONObject JSONify(String name, String dob, String address, String father) {
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", name);
+            jsonObject.put("dob", dob);
+            jsonObject.put("address", address);
+            jsonObject.put("father", father);
+
+            return jsonObject;
 
         } catch (JSONException e) {
             e.printStackTrace();
