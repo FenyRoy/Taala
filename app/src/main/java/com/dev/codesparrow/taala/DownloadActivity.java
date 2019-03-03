@@ -26,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.XML;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,6 +54,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 
 import static java.lang.Thread.sleep;
 
@@ -266,18 +267,22 @@ public class DownloadActivity extends AppCompatActivity {
 
 
             Toast.makeText(this, myData, Toast.LENGTH_SHORT).show();
-            JSONObject xmlJSONObj = XML.toJSONObject(myData);
-            String jsonPrettyPrintString = xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR);
-            Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
+
+            XmlToJson xmlToJson = new XmlToJson.Builder(myData).build();
+
+            JSONObject jsonObject = xmlToJson.toJson();
+
+            // convert to a Json String
+            String jsonString = xmlToJson.toString();
+
+            Toast.makeText(this, jsonString, Toast.LENGTH_SHORT).show();
+
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (JSONException e){
             e.printStackTrace();
         }
     }
