@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         String address = listItems.get(2);
         addrTxt.setText("Address: "+address);
         String father = listItems.get(3);
-        fatherTxt.setText("Father Name: "+father);
+        fatherTxt.setText("Gender: "+father);
         filename ="Key_Values";
 
         load_file();

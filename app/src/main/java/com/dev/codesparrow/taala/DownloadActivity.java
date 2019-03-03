@@ -80,6 +80,7 @@ public class DownloadActivity extends AppCompatActivity {
     private List<String> listItems;
     static String myData ="";
     TextView verifyTxt;
+    JSONObject jsonObject;
 
 
     public static String getSHA(String input)
@@ -334,10 +335,12 @@ public class DownloadActivity extends AppCompatActivity {
 
             XmlToJson xmlToJson = new XmlToJson.Builder(myData).build();
 
-            JSONObject jsonObject = xmlToJson.toJson();
+            jsonObject = xmlToJson.toJson();
 
             // convert to a Json String
             String jsonString = xmlToJson.toString();
+
+            Log.i("XML",jsonObject.toString());
 
             Toast.makeText(this, jsonString, Toast.LENGTH_SHORT).show();
 
