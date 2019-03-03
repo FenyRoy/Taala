@@ -41,11 +41,25 @@ public class MainActivity extends AppCompatActivity {
     static PublicKey publicKey;
     static PrivateKey privateKey;
     KeyPair keys;
+    private List<String> listItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        listItems = new ArrayList<>();
+
+        FileInputStream fis1;
+        try {
+            fis1 = openFileInput("userdata");
+            ObjectInputStream ois = new ObjectInputStream(fis1);
+            listItems = (ArrayList<String>) ois.readObject();
+            ois.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         filename ="Key_Values";
 
