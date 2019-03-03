@@ -61,7 +61,7 @@
         />
 
     <TextView
-        android:id="@+id/mytext"
+        android:id="@+id/mytextA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -69,6 +69,8 @@
         android:text="STEP 3"
         android:textColor="#999999"
         android:textSize="20dp"
+        android:visibility="invisible"
+
         />
 
     <TextView
@@ -82,6 +84,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/mytext5"
         android:textColor="@color/black"
+        android:visibility="invisible"
         />
 
     <Button
@@ -91,14 +94,17 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/normal_button_background"
         android:text="Upload File"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+
+        />
 
     <Button
         android:id="@+id/Continue"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="in"
+        android:visibility="invisible"
         android:layout_centerHorizontal="true"
         android:background="@drawable/normal_button_background"
         android:text="Continue"
