@@ -23,6 +23,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -131,77 +133,95 @@ public class DownloadActivity extends AppCompatActivity {
             public void onClick(View view) {
                 listItems.clear();
                 // Access a Cloud Firestore instance from your Activity
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference users = db.collection("users");
-                DocumentReference docRef = users.document("username");
-                Task<DocumentSnapshot> ref = docRef.get();
-                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Map<String, String> data1 = new HashMap<>();
-                                data1.put("name", "feny");
-                                listItems.add("feny");
-                                data1.put("dob", "10-09-19");
-                                listItems.add("10-09-19");
-                                data1.put("address", "Pukkunnel House");
-                                listItems.add("Pukkunnel House");
-                                data1.put("father", "Roy Paul");
-                                listItems.add("Roy Paul");
-                                data1.put("signature", "gjdhghughrduo");
-                                data1.put("hash", "grfgjirjg");
-
-                                FileOutputStream fos1;
-                                try {
-                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
-                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
-                                    oos.writeObject(listItems);
-                                    oos.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w("FCMToken", "getInstanceId failed", task.getException());
+                                    return;
                                 }
-                                Task<Void> reff = users.document(Username).set(data1);
 
-                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                // Get new Instance ID token
+                                String token = task.getResult().getToken();
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                CollectionReference users = db.collection("users");
+                                DocumentReference docRef = users.document(Username);
+                                Task<DocumentSnapshot> ref = docRef.get();
+                                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Map<String, String> data1 = new HashMap<>();
+                                                data1.put("name", "feny");
+                                                listItems.add("feny");
+                                                data1.put("dob", "10-09-19");
+                                                listItems.add("10-09-19");
+                                                data1.put("address", "Pukkunnel House");
+                                                listItems.add("Pukkunnel House");
+                                                data1.put("father", "Roy Paul");
+                                                listItems.add("Roy Paul");
+                                                data1.put("signature", "gjdhghughrduo");
+                                                data1.put("hash", "grfgjirjg");
+                                                data1.put("fcm", token);
 
-                                        try {
-                                            sleep(10000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
+                                                FileOutputStream fos1;
+                                                try {
+                                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
+                                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
+                                                    oos.writeObject(listItems);
+                                                    oos.close();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Task<Void> reff = users.document(Username).set(data1);
+
+                                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                        try {
+                                                            sleep(10000);
+                                                        } catch (InterruptedException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        loadpassintent();
+                                                    }
+                                                });
+                                                reff.addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                });
+                                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            task.getException().printStackTrace();
+                                            Log.d("Firestore", "get failed with ", task.getException());
+                                            Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
                                         }
-                                        loadpassintent();
                                     }
                                 });
-                                reff.addOnFailureListener(new OnFailureListener() {
+                                ref.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
-
                                     }
                                 });
-                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                                // Log and toast
+                                String msg = token;
+                                Log.d("FCMToken", msg);
+                                Toast.makeText(DownloadActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            task.getException().printStackTrace();
-                            Log.d("Firestore", "get failed with ", task.getException());
-                            Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                ref.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        });
 
 
             }
