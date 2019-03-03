@@ -18,6 +18,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -33,7 +35,6 @@ public class SplashActivity extends AppCompatActivity {
 
         isLoggedIn = getSharedPreferences("PREFERENCE",MODE_PRIVATE)
                 .getBoolean("isLoggedIn",false);
-
 
         Window window = this.getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.top_bar));
