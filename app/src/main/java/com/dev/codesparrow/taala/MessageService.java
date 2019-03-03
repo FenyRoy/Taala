@@ -16,32 +16,10 @@ public class MessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
-        Log.d("FCM", "From: " + remoteMessage.getFrom());
 
-        Intent loginIntent = new Intent(MessageService.this,LoginActivity.class);
-        startActivity(loginIntent);
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d("FCM", "Message data payload: " + remoteMessage.getData());
-            startActivity(loginIntent);
+        Toast.makeText(this, "Mesaage Recieved FCM", Toast.LENGTH_SHORT).show();
 
-//            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-//                scheduleJob();
-//            } else {
-                // Handle message within 10 seconds
-
-//            }
-
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d("FCM", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            startActivity(loginIntent);
-
-        }
     }
 
     @Override

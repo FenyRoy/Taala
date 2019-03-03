@@ -40,14 +40,13 @@ public class MainActivity extends AppCompatActivity {
     private Locale locale;
 
 
-
-    Button mainBtn;
     String filename;
     static PublicKey publicKey;
     static PrivateKey privateKey;
     KeyPair keys;
     private List<String> listItems;
     TextView nameTxt,dobTxt,addrTxt,fatherTxt;
+    Button shareBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +57,17 @@ public class MainActivity extends AppCompatActivity {
         dobTxt=findViewById(R.id.Udob);
         addrTxt=findViewById(R.id.Uaddress);
         fatherTxt=findViewById(R.id.Ufather);
+        shareBtn=findViewById(R.id.shareBtn);
 
         listItems = new ArrayList<>();
+
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent checkIntent = new Intent(MainActivity.this, CheckActivity.class);
+                startActivity(checkIntent);
+            }
+        });
 
         FileInputStream fis1;
         try {
