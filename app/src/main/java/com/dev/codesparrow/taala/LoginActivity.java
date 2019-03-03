@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     Button LoginButton;
     EditText UidText;
     TextView AvailaNoti;
+    String Username;
 
 
 
@@ -103,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
                 } else {
+                    Username=UidText.getText().toString();
                     loadpassintent();
                 }
             }
@@ -114,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loadpassintent() {
 
         Intent downloadIntent = new Intent(LoginActivity.this, DownloadActivity.class);
+        downloadIntent.putExtra("user", Username);
         startActivity(downloadIntent);
 
     }
