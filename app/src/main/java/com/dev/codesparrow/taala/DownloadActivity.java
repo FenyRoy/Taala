@@ -20,9 +20,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -47,13 +49,16 @@ public class DownloadActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
-    String encrypted,decrypted,result,ans,filename,xml;
+    String encrypted,decrypted,result,ans,filename,xml,Username;
     Integer x=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
+        Intent intent = getIntent();
+        Username = intent.getExtras().getString("user");
 
         webBtn=findViewById(R.id.webview);
         fileBtn=findViewById(R.id.uploadFile);
@@ -127,49 +132,38 @@ public class DownloadActivity extends AppCompatActivity {
         switch (requestCode) {
             case 7:
                 if (resultCode == RESULT_OK) {
-                    String PathHolder = data.getData().getPath();
-                    FileInputStream fis1;
-                    try {
+                    Uri uri=data.getData();
+                    LaterFunction(uri);
 
-
-
-
-
-                        File sdcard = Environment.getExternalStorageDirectory();
-                        File file = new File(sdcard,PathHolder);
-                        StringBuilder text = new StringBuilder();
-                        try {
-                            BufferedReader br = new BufferedReader(new FileReader(file));
-                            String line;
-
-                            while ((line = br.readLine()) != null) {
-                                text.append(line);
-                                text.append('\n');
-                            }
-                            br.close();
-                        }
-                        catch (IOException e) {
-                            Toast.makeText(this, "Error : " + e.toString(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-
-//Here We Stopped
-
-//                        fis1 = openFileInput(PathHolder);
-//                        ObjectInputStream ois = new ObjectInputStream(fis1);
-//                        xml = (String) ois.readObject();
-//                        ois.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-//                    Toast.makeText(this, xml, Toast.LENGTH_SHORT).show();
-
-//                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
                 }
-                break;
         }
+
+    }
+
+    public void LaterFunction(Uri uri) {
+        BufferedReader br;
+        FileOutputStream os;
+        try {
+            br = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
+            //WHAT TODO ? Is this creates new file with
+            //the name NewFileName on internal app storage?
+            String myData ="";
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                myData=myData+line;
+            }
+            lastFunction("newFileName");
+            Toast.makeText(this, myData, Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void lastFunction(String newFileName) {
+        //WHAT TODO? How to read line line the file
+        //now from internal app storage?
     }
 
     private void loadpassintent() {
