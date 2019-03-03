@@ -3,17 +3,38 @@ package com.dev.codesparrow.taala;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +52,7 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.web3j.abi.datatypes.Int;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -40,6 +62,7 @@ import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
 
+    Integer x;
     Button LoginButton;
     EditText UidText;
     KeyPairGenerator kpg;
@@ -48,18 +71,70 @@ public class LoginActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     byte [] encryptedBytes,decryptedBytes;
     Cipher cipher,cipher1;
-    String encrypted,decrypted,result,ans,filename;
+    String encrypted,decrypted,result,ans,filename,xml;
+    TextView AvailaNoti;
 
-    SharedPreferences sharedPreferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        x=0;
         filename ="Key_Values";
+        AvailaNoti=findViewById(R.id.avaiNoti);
 
+        UidText = findViewById(R.id.UidText);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("mytopic")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "completed";
+                        if (!task.isSuccessful()) {
+                            msg = "Failed to succeed";
+                        }
+                        Log.d("Subscribed", msg);
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FCMToken", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = token;
+                        Log.d("FCMToken", msg);
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        UidText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                AvailaNoti.setText("");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>=5){
+                    AvailaNoti.setText("Username Available");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         try {
 
@@ -89,8 +164,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-        UidText = findViewById(R.id.UidText);
-
 
         LoginButton = findViewById(R.id.LgnBtn);
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +173,87 @@ public class LoginActivity extends AppCompatActivity {
                 if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
-                    startActivity(OtpIntent);
-                }
 
+                    if(x==0)
+                    {
+                        webview();
+                        x=1;
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("text/xml");
+                        startActivityForResult(intent, 7);
+                    }else
+                      loadpassintent();
+                }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+
+        switch (requestCode) {
+            case 7:
+                if (resultCode == RESULT_OK) {
+                    String PathHolder = data.getData().getPath();
+                    FileInputStream fis1;
+                    try {
+
+
+
+
+
+                        File sdcard = Environment.getExternalStorageDirectory();
+                        File file = new File(sdcard,PathHolder);
+                        StringBuilder text = new StringBuilder();
+                        try {
+                            BufferedReader br = new BufferedReader(new FileReader(file));
+                            String line;
+
+                            while ((line = br.readLine()) != null) {
+                                text.append(line);
+                                text.append('\n');
+                            }
+                            br.close();
+                        }
+                        catch (IOException e) {
+                            Toast.makeText(this, "Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+
+//Here We Stopped
+
+//                        fis1 = openFileInput(PathHolder);
+//                        ObjectInputStream ois = new ObjectInputStream(fis1);
+//                        xml = (String) ois.readObject();
+//                        ois.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+//                    Toast.makeText(this, xml, Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private void loadpassintent() {
+
+        Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
+        startActivity(OtpIntent);
+
+    }
+
+    private void webview() {
+
+
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse("https://resident.uidai.gov.in/offlineaadhaar"));
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
     }
 
     public String ParseJSON(String name, String dob, String address, String father) {
@@ -134,11 +282,15 @@ public class LoginActivity extends AppCompatActivity {
         publicKey = kp.getPublic();
         privateKey = kp.getPrivate();
 
+        String pubText = Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT);
+        String priText = Base64.encodeToString(privateKey.getEncoded(), Base64.DEFAULT);
+
         keys=kp;
         saveToFile();
 
-        Log.i("Public Key",publicKey.getEncoded().toString());
-        Log.i("Private Key",privateKey.getEncoded().toString());
+        Log.i("Public Key", pubText);
+        Log.i("Private Key",priText);
+
 
         cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
