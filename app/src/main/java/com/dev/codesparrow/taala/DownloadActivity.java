@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +40,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -89,9 +100,38 @@ public class DownloadActivity extends AppCompatActivity {
 
         try {
 
+            JSONObject inputObject;
+            inputObject= JSONify("feny","10-09-19","Pukkunnel House","Roy Paul");
             String input;
-            input= ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
-
+            input = ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
+            // Access a Cloud Firestore instance from your Activity
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference users = db.collection("users");
+            DocumentReference docRef = users.document("username");
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Map<String, String> data1 = new HashMap<>();
+                            data1.put("name", "feny");
+                            data1.put("dob", "10-09-19");
+                            data1.put("address", "Pukkunnel House");
+                            data1.put("father", "Roy Paul");
+                            data1.put("signature", "gjdhghughrduo");
+                            data1.put("hash", "grfgjirjg");
+                            users.document("username").set(data1);
+                            Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d("Firestore", "get failed with ", task.getException());
+                        Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             String encoded=encryptThisString(input);
 
 
@@ -197,6 +237,24 @@ public class DownloadActivity extends AppCompatActivity {
             jsonObject.put("father", father);
 
             return jsonObject.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public JSONObject JSONify(String name, String dob, String address, String father) {
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", name);
+            jsonObject.put("dob", dob);
+            jsonObject.put("address", address);
+            jsonObject.put("father", father);
+
+            return jsonObject;
 
         } catch (JSONException e) {
             e.printStackTrace();
