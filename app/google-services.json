@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "561499050011",
+    "firebase_url": "https://sih2k19-be36a.firebaseio.com",
+    "project_id": "sih2k19-be36a",
+    "storage_bucket": "sih2k19-be36a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561499050011:android:a1329e62619604d2",
+        "android_client_info": {
+          "package_name": "com.dev.codesparrow.taala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561499050011-a7fcabf3r2m433qgpvk78ar1rl9jhh7a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.codesparrow.taala",
+            "certificate_hash": "b7728e4c196ed922982996ee39c3c53a088f0535"
+          }
+        },
+        {
+          "client_id": "561499050011-rna97t2omc91g1fc6l8jpqr98i88kiq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrR5y53pCM4GZyF7r1g9_6rTMVL5DETzI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561499050011-rna97t2omc91g1fc6l8jpqr98i88kiq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
