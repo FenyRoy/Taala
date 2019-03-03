@@ -31,4 +31,6 @@
         <activity android:name=".OtpActivity" />
     </application>
 
+
+
 </manifest>
