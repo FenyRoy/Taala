@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/UTitle"
+        android:padding="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="User Data"
+        android:gravity="center"
+        android:textColor="#504F4F"
+        android:layout_marginBottom="10dp"
+        android:textSize="30dp"
+        />
 
     <TextView
         android:id="@+id/Uname"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Fetch Your Data"
+        android:text="Name"
         android:textColor="@color/myblue1"
         android:layout_marginBottom="10dp"
-        android:textSize="30dp"
+        android:textSize="15dp"
         />
     <TextView
         android:id="@+id/Udob"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Fetch Your Data"
+        android:text="Date Of Birth"
         android:textColor="@color/myblue1"
         android:layout_marginBottom="10dp"
-        android:textSize="30dp"
+        android:textSize="15dp"
         />
     <TextView
         android:id="@+id/Uaddress"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Fetch Your Data"
+        android:text="Address"
         android:textColor="@color/myblue1"
         android:layout_marginBottom="10dp"
-        android:textSize="30dp"
+        android:textSize="15dp"
         />
     <TextView
         android:id="@+id/Ufather"
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Fetch Your Data"
+        android:text="Father Name"
         android:textColor="@color/myblue1"
         android:layout_marginBottom="10dp"
-        android:textSize="30dp"
+        android:textSize="15dp"
         />
 </LinearLayout>
