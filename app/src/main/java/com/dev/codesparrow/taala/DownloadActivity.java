@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,7 +64,7 @@ public class DownloadActivity extends AppCompatActivity {
 
     Button webBtn,fileBtn,continueBtn;
     TextView mytextA,mytext5;
-
+    public static int PRETTY_PRINT_INDENT_FACTOR = 4;
     KeyPairGenerator kpg;
     KeyPair kp,keys;
     static PublicKey publicKey;
@@ -74,6 +75,7 @@ public class DownloadActivity extends AppCompatActivity {
     Integer x=0;
     ProgressBar prgrsbr;
     private List<String> listItems;
+    static String myData ="";
     TextView verifyTxt;
 
 
@@ -161,7 +163,7 @@ public class DownloadActivity extends AppCompatActivity {
 
                                     }
                                 });
-
+                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             task.getException().printStackTrace();
@@ -216,6 +218,7 @@ public class DownloadActivity extends AppCompatActivity {
             String encoded=encryptThisString(input);
 
 
+
             Toast.makeText(this, encoded, Toast.LENGTH_SHORT).show();
             result = RSAEncrypt(encoded);
             Log.i("RSA Encrypted: ",result);
@@ -263,16 +266,27 @@ public class DownloadActivity extends AppCompatActivity {
             br = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
             //WHAT TODO ? Is this creates new file with
             //the name NewFileName on internal app storage?
-            String myData ="";
+
             String line = null;
             while ((line = br.readLine()) != null) {
-                myData=myData+line;
+                myData = myData+line;
             }
             lastFunction("newFileName");
+
+
             Toast.makeText(this, myData, Toast.LENGTH_SHORT).show();
+            JSONObject xmlJSONObj = XML.toJSONObject(myData);
+            String jsonPrettyPrintString = xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR);
+            Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, jsonPrettyPrintString, Toast.LENGTH_SHORT).show();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (JSONException e){
             e.printStackTrace();
         }
     }
@@ -367,7 +381,7 @@ public class DownloadActivity extends AppCompatActivity {
         cipher1.init(Cipher.DECRYPT_MODE, privateKey);
         decryptedBytes = cipher1.doFinal(result.getBytes());
         decrypted = new String(decryptedBytes);
-        System.out.println("DDecrypted?????"+decrypted);
+        System.out.println("Decrypted?????"+decrypted);
         return decrypted;
     }
 
