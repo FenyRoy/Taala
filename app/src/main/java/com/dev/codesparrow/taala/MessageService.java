@@ -18,7 +18,8 @@ public class MessageService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.d("FCM", "From: " + remoteMessage.getFrom());
 
-        Intent loginIntent = new Intent(MessageService.this,LoginActivity.class);
+        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        Intent loginIntent = new Intent(MessageService.this,CheckActivity.class);
         startActivity(loginIntent);
 
         // Check if message contains a data payload.
