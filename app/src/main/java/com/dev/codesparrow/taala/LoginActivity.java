@@ -140,88 +140,22 @@ public class LoginActivity extends AppCompatActivity {
                 if (UidText.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "UID Empty", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    if(x==0)
-                    {
-                        webview();
-                        x=1;
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("text/xml");
-                        startActivityForResult(intent, 7);
-                    }else
-                      loadpassintent();
+                    loadpassintent();
                 }
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
 
-        switch (requestCode) {
-            case 7:
-                if (resultCode == RESULT_OK) {
-                    String PathHolder = data.getData().getPath();
-                    FileInputStream fis1;
-                    try {
-
-
-
-
-
-                        File sdcard = Environment.getExternalStorageDirectory();
-                        File file = new File(sdcard,PathHolder);
-                        StringBuilder text = new StringBuilder();
-                        try {
-                            BufferedReader br = new BufferedReader(new FileReader(file));
-                            String line;
-
-                            while ((line = br.readLine()) != null) {
-                                text.append(line);
-                                text.append('\n');
-                            }
-                            br.close();
-                        }
-                        catch (IOException e) {
-                            Toast.makeText(this, "Error : " + e.toString(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-
-//Here We Stopped
-
-//                        fis1 = openFileInput(PathHolder);
-//                        ObjectInputStream ois = new ObjectInputStream(fis1);
-//                        xml = (String) ois.readObject();
-//                        ois.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-//                    Toast.makeText(this, xml, Toast.LENGTH_SHORT).show();
-
-//                    Toast.makeText(LoginActivity.this, PathHolder, Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-    }
 
     private void loadpassintent() {
 
-        Intent OtpIntent = new Intent(LoginActivity.this, OtpActivity.class);
-        startActivity(OtpIntent);
+        Intent downloadIntent = new Intent(LoginActivity.this, DownloadActivity.class);
+        startActivity(downloadIntent);
 
     }
 
-    private void webview() {
 
-
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse("https://resident.uidai.gov.in/offlineaadhaar"));
-        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
-    }
 
     public String ParseJSON(String name, String dob, String address, String father) {
         try {
