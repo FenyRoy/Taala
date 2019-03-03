@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,12 +43,17 @@ public class MainActivity extends AppCompatActivity {
     static PrivateKey privateKey;
     KeyPair keys;
     private List<String> listItems;
+    TextView nameTxt,dobTxt,addrTxt,fatherTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        nameTxt=findViewById(R.id.Uname);
+        dobTxt=findViewById(R.id.Udob);
+        addrTxt=findViewById(R.id.Uaddress);
+        fatherTxt=findViewById(R.id.Ufather);
 
         listItems = new ArrayList<>();
 
@@ -62,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String name = listItems.get(0);
+        nameTxt.setText("User Name: "+name);
         String DOB = listItems.get(1);
+        dobTxt.setText("DOB: "+DOB);
         String address = listItems.get(2);
+        addrTxt.setText("Address: "+address);
         String father = listItems.get(3);
+        fatherTxt.setText("Father Name: "+father);
         filename ="Key_Values";
 
         load_file();

@@ -13,6 +13,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +72,9 @@ public class DownloadActivity extends AppCompatActivity {
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename,xml,Username;
     Integer x=0;
+    ProgressBar prgrsbr;
     private List<String> listItems;
+    TextView verifyTxt;
 
 
     @Override
@@ -80,6 +84,8 @@ public class DownloadActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Username = intent.getExtras().getString("user");
+        prgrsbr=findViewById(R.id.progressBarDwn);
+        verifyTxt=findViewById(R.id.Verifying);
 
         listItems = new ArrayList<>();
         webBtn=findViewById(R.id.webview);
@@ -96,6 +102,8 @@ public class DownloadActivity extends AppCompatActivity {
             public void onClick(View view) {
                 listItems.clear();
                 // Access a Cloud Firestore instance from your Activity
+                prgrsbr.setVisibility(View.VISIBLE);
+                verifyTxt.setVisibility(View.VISIBLE);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 CollectionReference users = db.collection("users");
                 DocumentReference docRef = users.document("username");
@@ -109,14 +117,15 @@ public class DownloadActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
                             } else {
                                 Map<String, String> data1 = new HashMap<>();
-                                data1.put("name", "feny");
-                                listItems.add("feny");
+                                data1.put("name", "Feny Roy");
+                                listItems.add("Feny Roy");
                                 data1.put("dob", "10-09-19");
                                 listItems.add("10-09-19");
                                 data1.put("address", "Pukkunnel House");
                                 listItems.add("Pukkunnel House");
                                 data1.put("father", "Roy Paul");
                                 listItems.add("Roy Paul");
+                                listItems.add(Username);
                                 data1.put("signature", "gjdhghughrduo");
                                 data1.put("hash", "grfgjirjg");
 
@@ -136,10 +145,11 @@ public class DownloadActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
 
                                         try {
-                                            sleep(10000);
+                                            sleep(4000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
+                                        Toast.makeText(getBaseContext(), "Connection Success",Toast.LENGTH_SHORT).show();
                                         loadpassintent();
                                     }
                                 });
@@ -151,7 +161,7 @@ public class DownloadActivity extends AppCompatActivity {
 
                                     }
                                 });
-                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+
                             }
                         } else {
                             task.getException().printStackTrace();
@@ -199,7 +209,7 @@ public class DownloadActivity extends AppCompatActivity {
         try {
 
             JSONObject inputObject;
-            inputObject= JSONify("feny","10-09-19","Pukkunnel House","Roy Paul");
+            inputObject= JSONify("Feny Roy","10-09-19","Pukkunnel House","Roy Paul");
             String input;
             input = ParseJSON("feny","10-09-19","Pukkunnel House","Roy Paul");
 
