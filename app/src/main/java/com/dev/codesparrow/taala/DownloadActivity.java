@@ -80,6 +80,7 @@ public class DownloadActivity extends AppCompatActivity {
     private List<String> listItems;
     static String myData ="";
     TextView verifyTxt;
+    JSONObject jsonObject;
 
 
     public static String getSHA(String input)
@@ -168,17 +169,26 @@ public class DownloadActivity extends AppCompatActivity {
                                                 Toast.makeText(getBaseContext(), "Sorry you already have another account", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Map<String, String> data1 = new HashMap<>();
-                                                data1.put("name", "feny");
-                                                listItems.add("feny");
-                                                data1.put("dob", "10-09-19");
-                                                listItems.add("10-09-19");
-                                                data1.put("address", "Pukkunnel House");
-                                                listItems.add("Pukkunnel House");
-                                                data1.put("father", "Roy Paul");
-                                                listItems.add("Roy Paul");
-                                                data1.put("signature", "gjdhghughrduo");
-                                                data1.put("hash", "grfgjirjg");
-                                                data1.put("fcm", token);
+                                                try{
+                                                    JSONObject offline = jsonObject.getJSONObject("OfflinePaperlessKyc");
+                                                    JSONObject signatureContent = offline.getJSONObject("Signature");
+                                                    JSONObject UIDdata = offline.getJSONObject("UidData");
+                                                    JSONObject poa = UIDdata.getJSONObject("Poa");
+                                                    JSONObject poi = UIDdata.getJSONObject("Poi");
+                                                    data1.put("name", poi.getString("name"));
+                                                    listItems.add("feny");
+                                                    data1.put("dob", poi.getString("dob"));
+                                                    listItems.add("10-09-19");
+                                                    data1.put("address", poa.getString("street"));
+                                                    data1.put("gender", poi.getString("gender"));
+                                                    listItems.add("Pukkunnel House");
+                                                    listItems.add("Roy Paul");
+                                                    data1.put("signature", signatureContent.getString("SignatureValue"));
+                                                    data1.put("hash", "grfgjirjg");
+                                                    data1.put("fcm", token);
+                                                }catch(Exception e){
+
+                                                }
 
                                                 FileOutputStream fos1;
                                                 try {
