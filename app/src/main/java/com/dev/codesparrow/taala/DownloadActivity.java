@@ -119,6 +119,7 @@ public class DownloadActivity extends AppCompatActivity {
                                 listItems.add("Roy Paul");
                                 data1.put("signature", "gjdhghughrduo");
                                 data1.put("hash", "grfgjirjg");
+
                                 Task<Void> reff = users.document("username").set(data1);
                                 FileOutputStream fos1;
                                 try {
@@ -129,6 +130,8 @@ public class DownloadActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+                                Task<Void> reff = users.document(Username).set(data1);
+
                                 reff.addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -144,7 +147,7 @@ public class DownloadActivity extends AppCompatActivity {
                                 reff.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-
+                                        e.printStackTrace();
                                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -152,6 +155,7 @@ public class DownloadActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
                             }
                         } else {
+                            task.getException().printStackTrace();
                             Log.d("Firestore", "get failed with ", task.getException());
                             Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
                         }
@@ -160,7 +164,7 @@ public class DownloadActivity extends AppCompatActivity {
                 ref.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        e.printStackTrace();
                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
                     }
                 });
