@@ -130,7 +130,7 @@ public class DownloadActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                Task<Void> reff = users.document(Username).set(data1);
+                                reff = users.document(Username).set(data1);
 
                                 reff.addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
