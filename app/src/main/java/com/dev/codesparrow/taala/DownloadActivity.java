@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -113,7 +114,8 @@ public class DownloadActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             CollectionReference users = db.collection("users");
             DocumentReference docRef = users.document("username");
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            Task<DocumentSnapshot> ref = docRef.get();
+            ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
@@ -128,13 +130,31 @@ public class DownloadActivity extends AppCompatActivity {
                             data1.put("father", "Roy Paul");
                             data1.put("signature", "gjdhghughrduo");
                             data1.put("hash", "grfgjirjg");
-                            users.document("username").set(data1);
+                            Task<Void> reff = users.document("username").set(data1);
+                            reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                }
+                            });
+                            reff.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
                             Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Log.d("Firestore", "get failed with ", task.getException());
                         Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
                     }
+                }
+            });
+            ref.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
                 }
             });
             String encoded=encryptThisString(input);
