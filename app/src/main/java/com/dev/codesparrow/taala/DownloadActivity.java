@@ -59,6 +59,8 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import fr.arnaudguyon.xmltojsonlib.XmlToJson;
+
 import static java.lang.Thread.sleep;
 
 public class DownloadActivity extends AppCompatActivity {
@@ -142,30 +144,6 @@ public class DownloadActivity extends AppCompatActivity {
                 // Access a Cloud Firestore instance from your Activity
                 prgrsbr.setVisibility(View.VISIBLE);
                 verifyTxt.setVisibility(View.VISIBLE);
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference users = db.collection("users");
-                DocumentReference docRef = users.document("username");
-                Task<DocumentSnapshot> ref = docRef.get();
-                ref.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Map<String, String> data1 = new HashMap<>();
-                                data1.put("name", "Feny Roy");
-                                listItems.add("Feny Roy");
-                                data1.put("dob", "10-09-19");
-                                listItems.add("10-09-19");
-                                data1.put("address", "Pukkunnel House");
-                                listItems.add("Pukkunnel House");
-                                data1.put("father", "Roy Paul");
-                                listItems.add("Roy Paul");
-                                listItems.add(Username);
-                                data1.put("signature", "gjdhghughrduo");
-                                data1.put("hash", "grfgjirjg");
                 FirebaseInstanceId.getInstance().getInstanceId()
                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                             @Override
@@ -187,7 +165,7 @@ public class DownloadActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot document = task.getResult();
                                             if (document.exists()) {
-                                                Toast.makeText(getBaseContext(), "Sorry you already have another account",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getBaseContext(), "Sorry you already have another account", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Map<String, String> data1 = new HashMap<>();
                                                 data1.put("name", "feny");
@@ -202,20 +180,20 @@ public class DownloadActivity extends AppCompatActivity {
                                                 data1.put("hash", "grfgjirjg");
                                                 data1.put("fcm", token);
 
-                                FileOutputStream fos1;
-                                try {
-                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
-                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
-                                    oos.writeObject(listItems);
-                                    oos.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                Task<Void> reff = users.document(Username).set(data1);
+                                                FileOutputStream fos1;
+                                                try {
+                                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
+                                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
+                                                    oos.writeObject(listItems);
+                                                    oos.close();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Task<Void> reff = users.document(Username).set(data1);
 
-                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
+                                                reff.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
 
                                                         try {
                                                             sleep(10000);
@@ -230,37 +208,25 @@ public class DownloadActivity extends AppCompatActivity {
                                                     public void onFailure(@NonNull Exception e) {
                                                         e.printStackTrace();
                                                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
-                                        try {
-                                            sleep(4000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Toast.makeText(getBaseContext(), "Connection Success",Toast.LENGTH_SHORT).show();
-                                        loadpassintent();
-                                    }
-                                });
-                                reff.addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
-
                                                     }
                                                 });
-                                                Toast.makeText(getBaseContext(), "Success",Toast.LENGTH_SHORT).show();
+
+                                                Toast.makeText(DownloadActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
                                             task.getException().printStackTrace();
-                                            Log.d("Firestore", "get failed with ", task.getException());
-                                            Toast.makeText(getBaseContext(), "Firestore Failed",Toast.LENGTH_SHORT).show();
+                                            Log.d("Firestore", "get failed with", task.getException());
+                                            Toast.makeText(DownloadActivity.this, "Firestore Failed", Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });
+                                    });
                                 ref.addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(DownloadActivity.this, "Upload Failed Try Again", Toast.LENGTH_SHORT).show();
+
+
                                     }
                                 });
                                 // Log and toast
@@ -478,7 +444,7 @@ public class DownloadActivity extends AppCompatActivity {
         return decrypted;
     }
 
-    public static String encryptThisString(String input)
+    public String encryptThisString(String input)
     {
         try {
             // getInstance() method is called with algorithm SHA-1
