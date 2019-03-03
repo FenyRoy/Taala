@@ -176,13 +176,13 @@ public class DownloadActivity extends AppCompatActivity {
                                                     JSONObject poa = UIDdata.getJSONObject("Poa");
                                                     JSONObject poi = UIDdata.getJSONObject("Poi");
                                                     data1.put("name", poi.getString("name"));
-                                                    listItems.add("feny");
+                                                    listItems.add(poi.getString("name"));
                                                     data1.put("dob", poi.getString("dob"));
-                                                    listItems.add("10-09-19");
+                                                    listItems.add(poi.getString("dob"));
                                                     data1.put("address", poa.getString("street"));
+                                                    listItems.add(poa.getString("street"));
                                                     data1.put("gender", poi.getString("gender"));
-                                                    listItems.add("Pukkunnel House");
-                                                    listItems.add("Roy Paul");
+                                                    listItems.add(poi.getString("gender"));
                                                     data1.put("signature", signatureContent.getString("SignatureValue"));
                                                     data1.put("hash", "grfgjirjg");
                                                     data1.put("fcm", token);
