@@ -120,7 +120,6 @@ public class DownloadActivity extends AppCompatActivity {
                                 data1.put("signature", "gjdhghughrduo");
                                 data1.put("hash", "grfgjirjg");
 
-                                Task<Void> reff = users.document("username").set(data1);
                                 FileOutputStream fos1;
                                 try {
                                     fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
