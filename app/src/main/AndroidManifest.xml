@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DownloadActivity"></activity>
+        <activity android:name=".RegisterSuccessActivity"></activity>
+        <activity android:name=".DownloadActivity" />
         <activity android:name=".CheckActivity" />
         <activity android:name=".PassActivity" />
         <activity

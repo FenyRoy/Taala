@@ -1,30 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CheckActivity">
+    tools:context=".CheckActivity"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:gravity="center"
+    >
+
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
         android:id="@+id/logoImg"
-        android:layout_above="@+id/allignCenterID"
-        android:src="@drawable/logo"/>
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+
+        android:src="@drawable/logo"
+        />
+
+    <TextView
+        android:id="@+id/mytext1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="You have new Login Request"
+        android:textColor="@color/myblue1"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textSize="22dp"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/allignCenterID"/>
+        android:text="`SIH Client` has requested for KYC"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_above="@id/OTP"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mytext3"
+        android:textColor="@color/black"
+        android:paddingTop="20dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CLIENT ID : SIH_CLIENT"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_above="@id/OTP"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mytext4"
+        android:textColor="@color/black"
+        android:paddingBottom="20dp"
+        />
+
+
+
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Select data to be sent"
+        android:textColor="@color/myblue1"
+        android:layout_marginTop="20dp"
+        android:gravity="start"
+        android:layout_marginBottom="10dp"
+        android:textSize="14dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="vertical"
         android:weightSum="4"
@@ -41,11 +97,13 @@
                 android:id="@+id/text1"
                 android:text="Name"
                 android:textSize="20dp"
+                android:textColor="@color/black"
                 android:layout_weight="9"/>
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="end"
                 />
 
         </LinearLayout>
@@ -61,12 +119,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/text2"
                 android:text="Adddress"
+                android:textColor="@color/black"
                 android:textSize="20dp"
                 android:layout_weight="9"/>
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="end"
+                android:textColor="@color/black"
                 />
 
         </LinearLayout>
@@ -82,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/text3"
                 android:text="DOB"
+                android:textColor="@color/black"
                 android:textSize="20dp"
                 android:layout_weight="9"/>
             <CheckBox
@@ -102,6 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/text4"
+                android:textColor="@color/black"
                 android:text="Phone NO"
                 android:textSize="20dp"
                 android:layout_weight="9"/>
@@ -115,5 +178,18 @@
 
 
 
+
+
     </LinearLayout>
-</RelativeLayout>
+
+    <Button
+        android:id="@+id/CnfrmLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/OTP"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/normal_button_background"
+        android:text="CONFIRM LOGIN"
+        android:layout_marginTop="30dp"
+        android:textColor="#FFFFFF" />
+</LinearLayout>
