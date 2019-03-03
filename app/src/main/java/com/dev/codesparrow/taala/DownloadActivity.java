@@ -44,14 +44,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import static java.lang.Thread.sleep;
 
 public class DownloadActivity extends AppCompatActivity {
 
@@ -66,6 +70,8 @@ public class DownloadActivity extends AppCompatActivity {
     Cipher cipher,cipher1;
     String encrypted,decrypted,result,ans,filename,xml,Username;
     Integer x=0;
+    private List<String> listItems;
+
 
     public static String getSHA(String input)
     {
@@ -110,6 +116,7 @@ public class DownloadActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Username = intent.getExtras().getString("user");
 
+        listItems = new ArrayList<>();
         webBtn=findViewById(R.id.webview);
         fileBtn=findViewById(R.id.uploadFile);
         continueBtn=findViewById(R.id.Continue);
@@ -122,6 +129,7 @@ public class DownloadActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listItems.clear();
                 // Access a Cloud Firestore instance from your Activity
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 CollectionReference users = db.collection("users");
@@ -137,16 +145,36 @@ public class DownloadActivity extends AppCompatActivity {
                             } else {
                                 Map<String, String> data1 = new HashMap<>();
                                 data1.put("name", "feny");
+                                listItems.add("feny");
                                 data1.put("dob", "10-09-19");
+                                listItems.add("10-09-19");
                                 data1.put("address", "Pukkunnel House");
+                                listItems.add("Pukkunnel House");
                                 data1.put("father", "Roy Paul");
+                                listItems.add("Roy Paul");
                                 data1.put("signature", "gjdhghughrduo");
                                 data1.put("hash", "grfgjirjg");
+
+                                FileOutputStream fos1;
+                                try {
+                                    fos1 = getApplicationContext().openFileOutput("userdata", Context.MODE_PRIVATE);
+                                    ObjectOutputStream oos = new ObjectOutputStream(fos1);
+                                    oos.writeObject(listItems);
+                                    oos.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 Task<Void> reff = users.document(Username).set(data1);
+
                                 reff.addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
 
+                                        try {
+                                            sleep(10000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                         loadpassintent();
                                     }
                                 });
