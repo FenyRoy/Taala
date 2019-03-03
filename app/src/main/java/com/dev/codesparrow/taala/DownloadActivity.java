@@ -161,7 +161,7 @@ public class DownloadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("text/xml");
+                intent.setType("*/*");
                 startActivityForResult(intent, 7);
                 x++;
                 continueBtn.setVisibility(View.VISIBLE);
