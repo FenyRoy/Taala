@@ -17,8 +17,11 @@ public class MessageService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
 
+      
+        Intent loginIntent = new Intent(MessageService.this,CheckActivity.class);
+        startActivity(loginIntent);
 
-        Toast.makeText(this, "Mesaage Recieved FCM", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Message Recieved FCM", Toast.LENGTH_SHORT).show();
 
     }
 

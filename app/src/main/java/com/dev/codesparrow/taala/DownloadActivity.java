@@ -352,7 +352,6 @@ public class DownloadActivity extends AppCompatActivity {
             Toast.makeText(this, jsonString, Toast.LENGTH_SHORT).show();
 
 
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
